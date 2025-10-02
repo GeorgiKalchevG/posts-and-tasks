@@ -1,6 +1,7 @@
 import type { RootState } from "../../app/store"
 import { makeStore } from "../../app/store"
-import { selectTodoIds, User, useUpdateUserMutation } from "./usersApiSlice"
+import type { User } from "./usersApiSlice"
+import { selectUserIdToName } from "./usersApiSlice"
 
 describe("usersApiSlice selectTodoIds selector", () => {
   it("returns empty object when getUsers query is missing", () => {
@@ -13,7 +14,7 @@ describe("usersApiSlice selectTodoIds selector", () => {
 
     const store = makeStore(preloaded)
 
-    expect(selectTodoIds(store.getState())).toStrictEqual({})
+    expect(selectUserIdToName(store.getState())).toStrictEqual({})
   })
 
   it("returns empty object when getUsers query is rejected", () => {
@@ -30,7 +31,7 @@ describe("usersApiSlice selectTodoIds selector", () => {
 
     const store = makeStore(preloaded)
 
-    expect(selectTodoIds(store.getState())).toStrictEqual({})
+    expect(selectUserIdToName(store.getState())).toStrictEqual({})
   })
 
   it("maps user ids to names when getUsers is fulfilled", () => {
@@ -89,7 +90,7 @@ describe("usersApiSlice selectTodoIds selector", () => {
     } as unknown as Partial<RootState>
 
     const store = makeStore(preloaded)
-    expect(selectTodoIds(store.getState())).toStrictEqual({
+    expect(selectUserIdToName(store.getState())).toStrictEqual({
       1: "Leanne Graham",
       2: "Ervin Howell",
     })

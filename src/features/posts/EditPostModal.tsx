@@ -1,6 +1,6 @@
 import { Button, Form, Input, message, Modal, Space } from "antd"
 import { useCallback, useEffect, useState } from "react"
-import type { Post} from "./postsApiSlice.ts";
+import type { Post } from "./postsApiSlice.ts"
 import { useUpdatePostMutation } from "./postsApiSlice.ts"
 
 const { TextArea } = Input
@@ -29,7 +29,7 @@ export const EditPostModal = ({
     update(form.getFieldsValue(true) as Post)
       .catch((e: unknown) => {
         console.log(e)
-        message.error("Could not update the post")
+        void message.error("Could not update the post")
       })
       .finally(() => {
         setConfirmLoading(false)
@@ -53,9 +53,9 @@ export const EditPostModal = ({
     ({ errorFields }: { errorFields: { errors: string[] }[] }) => {
       const errorMessage = errorFields.map(f => f.errors.join(" "))
       if (errorMessage.length > 1) {
-        message.error("Please fill all required fields")
+        void message.error("Please fill all required fields")
       } else {
-        message.error(errorMessage[0])
+        void message.error(errorMessage[0])
       }
     },
     [],
@@ -70,7 +70,6 @@ export const EditPostModal = ({
       onCancel={handleCancel}
       confirmLoading={confirmLoading}
       footer={() => <></>}
-
     >
       <Form
         wrapperCol={{ span: 24 }}

@@ -4,9 +4,7 @@ import { useGetUsersQuery } from "../../features/users/usersApiSlice.ts"
 
 export function Navigation() {
   const { userId } = useParams()
-  const {
-    existingUser,
-  } = useGetUsersQuery(undefined, {
+  const { existingUser } = useGetUsersQuery(undefined, {
     selectFromResult: ({ data, isLoading, isError, isSuccess }) => ({
       existingUser: data?.find(user => user.id === Number(userId)),
       isLoading,

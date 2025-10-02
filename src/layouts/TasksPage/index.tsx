@@ -1,10 +1,14 @@
-import { Empty, Typography } from "antd"
+import { Empty, Skeleton, Typography } from "antd"
 import { ErrorPlaceholder } from "../../app/components/ErrorPlaceholder.tsx"
 import { TasksTable } from "../../features/tasks/TasksTable.tsx"
 import { useGetTasksQuery } from "../../features/tasks/tasksApiSlice.ts"
 
 export const TasksPage = () => {
   const { data, isError, isLoading } = useGetTasksQuery()
+
+  if (isLoading) {
+    return <Skeleton />
+  }
 
   if (isError) {
     return <ErrorPlaceholder />
@@ -31,7 +35,7 @@ export const TasksPage = () => {
       }}
     >
       <div style={{ display: "flex", width: "100%", alignItems: "center" }}>
-        <TasksTable tasks={data} isLoading={isLoading} />
+        <TasksTable tasks={data} />
       </div>
     </div>
   )

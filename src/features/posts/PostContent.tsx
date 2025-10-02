@@ -1,13 +1,13 @@
-import { Card, Flex, Modal } from "antd"
+import { Card, Flex, message, Modal } from "antd"
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
 import type { Post } from "./postsApiSlice.ts"
 import { useDeletePostMutation } from "./postsApiSlice.ts"
 import type { ReactNode } from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { EditPostModal } from "./EditPostModal.tsx"
 
-export const PostForm = ({
+export const PostContent = ({
   post,
   isLoading,
 }: {
@@ -16,7 +16,12 @@ export const PostForm = ({
 }) => {
   const { userId } = useParams()
 
-  const [deletePost] = useDeletePostMutation()
+  const [deletePost, { error }] = useDeletePostMutation()
+  useEffect(() => {
+    if (error) {
+      void message.error("Could not delete Post")
+    }
+  }, [error])
 
   const [open, setOpen] = useState(false)
 

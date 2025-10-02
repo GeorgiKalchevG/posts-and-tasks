@@ -1,19 +1,19 @@
 import type { Task } from "./tasksApiSlice.ts"
 import { useUpdateTaskMutation } from "./tasksApiSlice.ts"
 import type { JSX } from "react"
-import { useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type {
   InputRef,
   TableColumnsType,
   TableColumnType,
   TableProps,
 } from "antd"
-import { Button, Input, message, Skeleton, Space, Switch, Table } from "antd"
+import { Button, Input, message, Space, Switch, Table } from "antd"
 import type { FilterDropdownProps } from "antd/es/table/interface"
 import { SearchOutlined } from "@ant-design/icons"
 import Highlighter from "react-highlight-words"
 import { useAppSelector } from "../../app/hooks.ts"
-import { selectTodoIds } from "../users/usersApiSlice.ts"
+import { selectUserIdToName } from "../users/usersApiSlice.ts"
 
 type DataIndex = keyof Task
 type OnChange = NonNullable<TableProps<Task>["onChange"]>
@@ -24,23 +24,25 @@ type Sorts = GetSingle<Parameters<OnChange>[2]>
 
 export const TasksTable = ({
   tasks,
-  isLoading,
 }: {
   tasks: Task[]
-  isLoading: boolean
 }): JSX.Element | null => {
   const [filteredInfo, setFilteredInfo] = useState<Filters>({})
   const [sortedInfo, setSortedInfo] = useState<Sorts>({})
   const [searchText, setSearchText] = useState("")
   const [searchedColumn, setSearchedColumn] = useState("")
   const searchInput = useRef<InputRef>(null)
-  const [update] = useUpdateTaskMutation()
+  const [update, { error }] = useUpdateTaskMutation()
   const handleChange: OnChange = (_pagination, filters, sorter) => {
     setFilteredInfo(filters)
     setSortedInfo(sorter as Sorts)
   }
-
-  const ss: Record<number, string> = useAppSelector(selectTodoIds)
+  useEffect(() => {
+    if (error) {
+      void message.error("Could not update the task's staus")
+    }
+  }, [error])
+  const ss: Record<number, string> = useAppSelector(selectUserIdToName)
   const memoizedTasks = useMemo(
     () =>
       tasks.map(task => ({
@@ -57,8 +59,8 @@ export const TasksTable = ({
   const clearAll = () => {
     setFilteredInfo({})
     setSortedInfo({})
-    setSearchedColumn('')
-    setSearchText('')
+    setSearchedColumn("")
+    setSearchText("")
   }
 
   const handleSearch = (
@@ -176,10 +178,8 @@ export const TasksTable = ({
       ),
   })
   const onCompletedChange = (task: Task) => (e: boolean) => {
-    console.log(e, task)
     update({ ...task, completed: e }).catch((e: unknown) => {
       console.error(e)
-      message.error("Could not update the task's staus")
     })
   }
   const columns: TableColumnsType<Task> = [
@@ -200,7 +200,6 @@ export const TasksTable = ({
       key: "username",
       filteredValue: filteredInfo.username ?? null,
       onFilter: (value, record) => {
-        console.log(value)
         const username = record.username ?? ""
         return username.includes(value.toString(10))
       },
@@ -237,9 +236,6 @@ export const TasksTable = ({
       },
     },
   ]
-  if (isLoading) {
-    return <Skeleton active={isLoading} />
-  }
 
   return (
     <div>

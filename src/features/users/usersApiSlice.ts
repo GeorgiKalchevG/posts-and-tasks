@@ -91,7 +91,7 @@ export const usersApiSlice = createApi({
 // Same as `tasksApiSlice.endpoints.getQuotes.useQuery`
 export const { useGetUsersQuery, useUpdateUserMutation } = usersApiSlice
 
-export const selectTodoIds = createSelector(
+export const selectUserIdToName = createSelector(
   (state: RootState) => {
     return state.userApi
   },

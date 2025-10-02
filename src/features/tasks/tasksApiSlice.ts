@@ -31,7 +31,7 @@ export const tasksApiSlice = createApi({
       },
     }),
     updateTask: build.mutation<Task, Task>({
-      query: (task) => ({
+      query: task => ({
         url: `/${task.id.toString(10)}`,
         method: "PUT",
         body: task,
@@ -54,7 +54,7 @@ export const tasksApiSlice = createApi({
           await queryFulfilled
         } catch {
           patchResult.undo()
-
+          // throw new Error("Failed Updating status")
           /**
            * Alternatively, on failure you can invalidate the corresponding cache tags
            * to trigger a re-fetch:

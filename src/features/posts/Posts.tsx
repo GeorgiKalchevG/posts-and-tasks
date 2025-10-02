@@ -1,7 +1,7 @@
 import type { JSX } from "react"
 import styles from "./Posts.module.css"
 import type { Post } from "./postsApiSlice.ts"
-import { PostForm } from "./PostForm.tsx"
+import { PostContent } from "./PostContent.tsx"
 
 export const Posts = ({
   posts,
@@ -13,7 +13,7 @@ export const Posts = ({
   return (
     <div className={styles.container}>
       {posts.map(post => (
-        <PostForm key={post.id} post={post} isLoading={isLoading} />
+        <PostContent key={post.id} post={post} isLoading={isLoading} />
       ))}
     </div>
   )

@@ -2,11 +2,14 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  div{
+
+  div {
     display: flex;
+
     a {
       padding: 0 1rem 0;
-      &:hover{
+
+      &:hover {
         box-shadow: yellow 0 -2px 8px 0;
       }
     }

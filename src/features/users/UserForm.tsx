@@ -1,6 +1,6 @@
 import type { User } from "./usersApiSlice.ts"
 import { useUpdateUserMutation } from "./usersApiSlice.ts"
-import { Button, Col, Form, Input, message, Row, Skeleton, Space } from "antd"
+import { Button, Col, Form, Input, message, Row, Skeleton, Space,  } from "antd"
 import { useCallback, useEffect, useState } from "react"
 
 const layout = {
@@ -25,11 +25,18 @@ export const UserForm = ({
   isLoading: boolean
 }) => {
   const [form] = Form.useForm<User>()
-  const [update] = useUpdateUserMutation()
+
+  const [update, { error }] = useUpdateUserMutation()
+  
   const [touched, setTouched] = useState(false)
   useEffect(() => {
     form.setFieldsValue(user)
   }, [user, form])
+  useEffect(() => {
+    if (error) {
+      void message.error("Could not update user details")
+    }
+  }, [error])
 
   const onFinish = () => {
     update({ body: form.getFieldsValue(true) as User, id: user.id }).catch(
@@ -42,9 +49,9 @@ export const UserForm = ({
     ({ errorFields }: { errorFields: { errors: string[] }[] }) => {
       const errorMessage = errorFields.map(f => f.errors.join(" "))
       if (errorMessage.length > 1) {
-        message.error("Please fill all required fields")
+        void message.error("Please fill all required fields")
       } else {
-        message.error(errorMessage[0])
+        void message.error(errorMessage[0])
       }
     },
     [],
@@ -99,7 +106,7 @@ export const UserForm = ({
             <Input />
           </Form.Item>
           <Form.Item name={["company", "catchPhrase"]} label="Catch Phrase">
-            <Input name={"catchPhrase"} />
+            <Input />
           </Form.Item>
           <Form.Item name={["company", "bs"]} label="BS">
             <Input />

@@ -84,4 +84,8 @@ export const postsApiSlice = createApi({
   }),
 })
 
-export const { useDeletePostMutation, useGetPostsQuery, useUpdatePostMutation } = postsApiSlice
+export const {
+  useDeletePostMutation,
+  useGetPostsQuery,
+  useUpdatePostMutation,
+} = postsApiSlice

@@ -5,6 +5,7 @@ import type { PropsWithChildren, ReactElement } from "react"
 import { Provider } from "react-redux"
 import type { AppStore, RootState } from "../app/store"
 import { makeStore } from "../app/store"
+import { App as AntdApp } from "antd"
 
 /**
  * This type extends the default options for
@@ -33,6 +34,7 @@ type ExtendedRenderOptions = Omit<RenderOptions, "queries"> & {
   store?: AppStore
 }
 
+export * from "@testing-library/react"
 /**
  * Renders the given React element with Redux Provider and custom store.
  * This function is useful for testing components that are connected to the Redux store.
@@ -53,7 +55,9 @@ export const renderWithProviders = (
   } = extendedRenderOptions
 
   const Wrapper = ({ children }: PropsWithChildren) => (
-    <Provider store={store}>{children}</Provider>
+    <AntdApp>
+      <Provider store={store}>{children}</Provider>
+    </AntdApp>
   )
 
   // Return an object with the store and all of RTL's query functions

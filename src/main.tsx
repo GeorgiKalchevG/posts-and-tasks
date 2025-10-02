@@ -2,12 +2,13 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { Provider } from "react-redux"
 import { App } from "./App"
-import { App as AntdApp } from "antd"
+import { App as AntdApp, Result } from "antd"
 import { store } from "./app/store"
 import "./index.css"
 import { BrowserRouter } from "react-router"
 import "@ant-design/v5-patch-for-react-19"
 import { ErrorBoundary } from "./ErrorBoundery.tsx"
+import GoHomeButton from "./app/components/GoHomeButton.tsx"
 
 const container = document.getElementById("root")
 
@@ -16,15 +17,23 @@ if (container) {
 
   root.render(
     <StrictMode>
-      <ErrorBoundary fallback={<p>Something went wrong</p>}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <ErrorBoundary
+          fallback={
+            <Result
+              status="error"
+              subTitle={"Something went really wrong"}
+              extra={<GoHomeButton />}
+            />
+          }
+        >
           <Provider store={store}>
             <AntdApp>
               <App />
             </AntdApp>
           </Provider>
-        </BrowserRouter>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </BrowserRouter>
     </StrictMode>,
   )
 } else {

@@ -10,7 +10,10 @@ type UsersProps = {
   isLoading: boolean
 }
 
-export const Users = ({ users = [], isLoading }: UsersProps): JSX.Element | null => {
+export const Users = ({
+  users = [],
+  isLoading,
+}: UsersProps): JSX.Element | null => {
   const navigate = useNavigate()
   const items = useMemo(() => {
     const genExtra = (userId: number) => (
@@ -26,9 +29,9 @@ export const Users = ({ users = [], isLoading }: UsersProps): JSX.Element | null
     return users.map(user => ({
       key: user.id,
       label: user.name,
-      children: <UserForm user={user} isLoading={isLoading}/>,
+      children: <UserForm user={user} isLoading={isLoading} />,
       extra: genExtra(user.id),
     }))
-  }, [navigate, users])
+  }, [isLoading, navigate, users])
   return <Collapse items={items} />
 }
